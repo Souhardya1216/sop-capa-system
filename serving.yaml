@@ -1,0 +1,45 @@
+apiVersion: ai.sap.com/v1alpha1
+kind: ServingTemplate
+metadata:
+  name: sop-compliance-serving
+  annotations:
+    scenarios.ai.sap.com/name: "Sop compliance check Scenario"
+    scenarios.ai.sap.com/description: "Pipeline for sop compliance checking"
+
+    executables.ai.sap.com/name: "sop-compliance"
+    executables.ai.sap.com/description: "Sop compliance checking endpoints"
+
+    artifacts.ai.sap.com/anomalymodel.kind: "model"
+  labels:
+    scenarios.ai.sap.com/id: "sop-compliance-check"
+    ai.sap.com/version: "1.0"
+spec:
+  # inputs:
+  #   artifacts:
+  #     - name: anomalymodel
+  template:
+    apiVersion: "serving.kserve.io/v1beta1"
+    metadata:
+      annotations: |
+        autoscaling.knative.dev/metric: concurrency
+        autoscaling.knative.dev/target: 1
+        autoscaling.knative.dev/targetBurstCapacity: 0
+      labels: |
+        ai.sap.com/resourcePlan: starter
+    spec: |
+      predictor:
+        imagePullSecrets:
+          - name: souhardya1234
+        minReplicas: 1
+        maxReplicas: 3
+        containers:
+          - name: kserve-container
+            image: docker.io/souhardya1234/sop_compliance_system
+            ports:
+              - containerPort: 9001
+                protocol: TCP
+            command: ["/bin/sh", "-c"]
+            args:
+              - >
+                set -e && echo "Starting" && gunicorn --chdir /app main:app -b 0.0.0.0:9001
+ 
