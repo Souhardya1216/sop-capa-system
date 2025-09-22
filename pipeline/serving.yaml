@@ -1,0 +1,45 @@
+apiVersion: ai.sap.com/v1alpha1
+kind: ServingTemplate
+metadata:
+  name: sop-compliance-serving
+  annotations:
+    scenarios.ai.sap.com/name: "SOP compliance check Scenario"
+    scenarios.ai.sap.com/description: "Pipeline for SOP parameter extraction, batch comparison, and CAPA generation"
+
+    executables.ai.sap.com/name: "sop-compliance"
+    executables.ai.sap.com/description: "SOP compliance checking endpoints"
+
+    artifacts.ai.sap.com/anomalymodel.kind: "model"
+  labels:
+    scenarios.ai.sap.com/id: "sop-compliance-check"
+    ai.sap.com/version: "1.0"
+spec:
+  template:
+    apiVersion: serving.kserve.io/v1beta1
+    metadata:
+      annotations:
+        autoscaling.knative.dev/metric: "concurrency"
+        autoscaling.knative.dev/target: "1"
+        autoscaling.knative.dev/targetBurstCapacity: "0"
+      labels:
+        ai.sap.com/resourcePlan: starter
+    spec:
+      predictor:
+        imagePullSecrets:
+          - name: souhardya1234
+        minReplicas: 1
+        maxReplicas: 3
+        containers:
+          - name: kserve-container
+            image: docker.io/souhardya1234/ai-core-service:v1.0.0
+            ports:
+              - containerPort: 8080
+                protocol: TCP
+            # Optional, since already defined in Dockerfile
+            command: ["uvicorn"]
+            args:
+              - "app:app"
+              - "--host"
+              - "0.0.0.0"
+              - "--port"
+              - "8080"
