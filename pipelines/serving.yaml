@@ -1,17 +1,17 @@
 apiVersion: ai.sap.com/v1alpha1
 kind: ServingTemplate
 metadata:
-  name: demo-aicore-anomaly-serving
+  name: demo-aicore-toolkit
   annotations:
-    scenarios.ai.sap.com/name: "Demo Aicore Anomaly Detection Scenario"
-    scenarios.ai.sap.com/description: "Pipeline for anomaly detection"
+    scenarios.ai.sap.com/name: "Demo Aicore Toolkit"
+    scenarios.ai.sap.com/description: "Pipeline for aicore toolkit"
 
-    executables.ai.sap.com/name: "demo-aicoreanomalymodelserving"
-    executables.ai.sap.com/description: "Serving endpoint for anomaly detection model"
+    executables.ai.sap.com/name: "demo-aicoretoolkitserving"
+    executables.ai.sap.com/description: "Serving endpoint for aicore tool kit"
 
     artifacts.ai.sap.com/anomalymodel.kind: "model"
   labels:
-    scenarios.ai.sap.com/id: "demo-aicore-anomaly"
+    scenarios.ai.sap.com/id: "demo-aicore-tooolkit"
     ai.sap.com/version: "1.0"
 spec:
   # inputs:
