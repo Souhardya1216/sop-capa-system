@@ -29,7 +29,7 @@ spec:
         maxReplicas: 3
         containers:
           - name: kserve-container
-            image: docker.io/souhardya1234/ai-core-service:v1.0.0
+            image: docker.io/souhardya1234/sop-capa:v3
             ports:
               - containerPort: 8080
                 protocol: TCP
