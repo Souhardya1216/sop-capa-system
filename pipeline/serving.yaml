@@ -1,7 +1,7 @@
 apiVersion: ai.sap.com/v1alpha1
 kind: ServingTemplate
 metadata:
-  name: sop-compliance-serving
+  name: sop-compliance-serving-ui
   annotations:
     scenarios.ai.sap.com/name: "SOP compliance check Scenario"
     scenarios.ai.sap.com/description: "Pipeline for SOP parameter extraction, batch comparison, and CAPA generation"
@@ -40,3 +40,4 @@ spec:
               - "0.0.0.0"
               - "--port"
               - "8080"
+
