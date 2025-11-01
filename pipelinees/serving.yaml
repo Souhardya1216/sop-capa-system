@@ -1,0 +1,42 @@
+apiVersion: ai.sap.com/v1alpha1
+kind: ServingTemplate
+metadata:
+  name: pharma-docgen-serving
+  annotations:
+    scenarios.ai.sap.com/name: "Pharma Document Generator"
+    scenarios.ai.sap.com/description: "Generate Batch SOP, Environmental SOP, and Environmental Checklist from regulation docs"
+    executables.ai.sap.com/name: "pharma-docgen"
+    executables.ai.sap.com/description: "AI Core service exposing /v2/upload, /v2/generate, /v2/list_documents, /v2/download"
+    artifacts.ai.sap.com/anomalymodel.kind: "model"
+  labels:
+    scenarios.ai.sap.com/id: "pharma-docgen"
+    ai.sap.com/version: "1.0"
+spec:
+  template:
+    apiVersion: "serving.kserve.io/v1beta1"
+    metadata:
+      annotations: |
+        autoscaling.knative.dev/metric: concurrency
+        autoscaling.knative.dev/target: 1
+        autoscaling.knative.dev/targetBurstCapacity: 0
+      labels: |
+        ai.sap.com/resourcePlan: starter
+    spec: |
+      predictor:
+        imagePullSecrets:
+          - name: souhardya1234    # <-- must match the Docker Registry secret name in your AI Core project
+        minReplicas: 1
+        maxReplicas: 3
+        containers:
+          - name: kserve-container
+            image: docker.io/souhardya1234/doc_generation:latest
+            ports:
+              - containerPort: 8080
+                protocol: TCP
+            command: ["uvicorn"]
+            args:
+              - "app:app"
+              - "--host"
+              - "0.0.0.0"
+              - "--port"
+              - "8080"
